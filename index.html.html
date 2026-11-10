@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua Script to Loadstring Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden p-6 md:p-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                Lua Script to Loadstring Converter
+            </h1>
+            <p class="text-slate-400 text-sm mt-2">แปลงสคริปต์ Lua ของคุณให้เป็นรูปแบบ Loadstring สำหรับนำไปใช้งานง่ายๆ</p>
+        </div>
+
+        <!-- Main Form / Inputs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Input Area -->
+            <div class="flex flex-col">
+                <label class="text-sm font-medium text-slate-300 mb-2 flex justify-between items-center">
+                    <span>สคริปต์ต้นฉบับ (Raw Lua Script)</span>
+                    <button onclick="clearInput()" class="text-xs text-red-400 hover:text-red-300">ล้างข้อความ</button>
+                </label>
+                <textarea id="rawScript" rows="10" placeholder="-- วางโค้ด Lua ของคุณที่นี่..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 font-mono resize-none"></textarea>
+            </div>
+
+            <!-- Output Area -->
+            <div class="flex flex-col">
+                <label class="text-sm font-medium text-slate-300 mb-2 flex justify-between items-center">
+                    <span>ผลลัพธ์ Loadstring</span>
+                    <button onclick="copyOutput()" class="text-xs text-indigo-400 hover:text-indigo-300">คัดลอกโค้ด</button>
+                </label>
+                <textarea id="outputScript" rows="10" readonly placeholder="loadstring(game:HttpGet('...'))()..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-400 focus:outline-none font-mono resize-none"></textarea>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800">
+            <div class="text-xs text-slate-500">
+                * รองรับการแปลงโค้ดพื้นฐานและเข้ารหัสแบบย่อขนาด
+            </div>
+            <button onclick="generateLoadstring()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-medium rounded-xl shadow-lg transition-all transform active:scale-95">
+                แปลงเป็น Loadstring
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function generateLoadstring() {
+            const raw = document.getElementById('rawScript').value;
+            if (!raw.trim()) {
+                alert('กรุณากรอกสคริปต์ Lua ก่อนแปลง!');
+                return;
+            }
+
+            // จำลองการสร้างรูปแบบ Loadstring ง่ายๆ (หรือปรับแต่งตามต้องการ)
+            // ในที่นี้สมมติว่าอัปโหลดหรือแปลงเป็นรูปแบบ URL หรือ Base64 / Minify เบื้องต้น
+            // หรือสร้างโครงสร้าง loadstring มาตรฐาน
+            const encoded = btoa(unescape(encodeURIComponent(raw)));
+            const loadstringCode = `loadstring(game:HttpGet("data:text/plain;base64,${encoded}"))()`;
+            
+            document.getElementById('outputScript').value = loadstringCode;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('outputScript');
+            if (!output.value) return;
+            output.select();
+            document.execCommand('copy');
+            alert('คัดลอก Loadstring สำเร็จ!');
+        }
+
+        function clearInput() {
+            document.getElementById('rawScript').value = '';
+            document.getElementById('outputScript').value = '';
+        }
+    </script>
+</body>
+</html>
